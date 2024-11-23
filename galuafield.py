@@ -1,5 +1,6 @@
 import math
 
+
 class FiniteField:
     def __init__(self, value, modulus):
         if not isinstance(value, int) or not isinstance(modulus, int):

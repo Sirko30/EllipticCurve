@@ -36,14 +36,14 @@ class EllipticCurvePoint:
                 if self.y == 0:
                     return EllipticCurvePoint(float('inf'), float('inf'), self.a, self.b, self.p)
 
-                # Обчислення коефіцієнта наклона дотичної
-                slope = ((3 * self.x ** 2 + 2 * self.a * self.x + self.b) * pow(2 * self.y, -1, self.p)) % self.p
+                # Обчислення коефіцієнта нахилу дотичної
+                slope = ((3 * self.x ** 2 + self.a) * pow(2 * self.y, -1, self.p)) % self.p
             else:
                 # Перевірка, чи точки знаходяться на вертикальній лінії
                 if self.x == other.x:
                     return EllipticCurvePoint(float('inf'), float('inf'), self.a, self.b, self.p)
 
-                # Обчислення коефіцієнта наклона прямої
+                # Обчислення коефіцієнта нахилу прямої
                 slope = ((other.y - self.y) * pow(other.x - self.x, -1, self.p)) % self.p
 
             # Обчислення координати x третьої точки
@@ -62,9 +62,12 @@ class EllipticCurvePoint:
 
 
 p = 23  # Поле простого числа
+a = 1  # Параметр кривої
+b = 1  # Параметр кривої
+
 # Створення точок на еліптичній кривій
-p1 = EllipticCurvePoint(3, 10, 1, 1, p)
-p2 = EllipticCurvePoint(9, 7, 1, 1, p)
+p1 = EllipticCurvePoint(3, 10, a, b, p)
+p2 = EllipticCurvePoint(9, 7, a, b, p)
 
 # Додавання точок
 p3 = p1 + p2
@@ -78,13 +81,13 @@ print(f"p1 != p2: {p1 != p2}")
 x = np.linspace(0, p - 1, 1000)
 y = np.linspace(0, p - 1, 1000)
 X, Y = np.meshgrid(x, y)
-Z = (Y ** 2 - X ** 3 - p1.a * X - p1.b) % p
+Z = (Y ** 2 - (X ** 3 + a * X + b)) % p
 
 # Графік еліптичної кривої та точок
 plt.contour(X, Y, Z, [0], colors='b')  # Еліптична крива
 plt.plot(p1.x, p1.y, 'ro', label='P1')  # Точка P1
-plt.plot(p2.x, p2.y, 'ro', label='P2')  # Точка P2
-plt.plot(p3.x, p3.y, 'ro', label='P3')  # Точка P3
+plt.plot(p2.x, p2.y, 'go', label='P2')  # Точка P2
+plt.plot(p3.x, p3.y, 'bo', label='P3')  # Точка P3
 
 plt.xlabel('X')
 plt.ylabel('Y')
